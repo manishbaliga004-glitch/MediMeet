@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediMeet | Admin Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f3f7fb;
+            color: #243247;
+        }
+
+        header {
+            background: #087f8c;
+            color: white;
+            padding: 20px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 26px;
+        }
+
+        header p {
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .home-btn {
+            background: white;
+            color: #087f8c;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #64748b;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #0000000d;
+            border-left: 5px solid #087f8c;
+        }
+
+        .stat-card h3 {
+            font-size: 15px;
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+
+        .stat-card p {
+            font-size: 30px;
+            font-weight: bold;
+            color: #087f8c;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 12px #0000000d;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .panel-header h2 {
+            font-size: 22px;
+        }
+
+        .search-area {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        input {
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            min-width: 200px;
+            width: 100%;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #087f8c;
+        }
+
+        .refresh-btn,
+        .save-btn {
+            background: #087f8c;
+            color: white;
+        }
+
+        .edit-btn {
+            background: #dbeafe;
+            color: #1d4ed8;
+            margin-right: 5px;
+        }
+
+        .delete-btn,
+        .cancel-btn {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .secondary-btn {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th, td {
+            padding: 15px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #eef7f8;
+            color: #087f8c;
+            font-size: 13px;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        .status {
+            color: #15803d;
+            background: #dcfce7;
+            padding: 6px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .message {
+            padding: 20px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .error {
+            color: #b91c1c;
+        }
+
+        .doctor-form {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .form-field label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .form-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .form-note {
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .doctor-form {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                padding: 20px;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .panel {
+                padding: 15px;
+            }
+
+            .form-actions {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div>
+        <h1>🏥 MediMeet Admin</h1>
+        <p>Hospital Appointment Management</p>
+    </div>
+
+    <div class="header-buttons">
+        <button class="home-btn" onclick="goHome()">Patient Website</button>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+</header>
+
+<main class="container">
+
+    <section class="welcome">
+        <h2>Welcome, Admin! 👋</h2>
+        <p>Manage patient appointments and hospital doctors from one place.</p>
+    </section>
+
+    <!-- Appointment statistics -->
+    <section class="stats">
+        <div class="stat-card">
+            <h3>Total Appointments</h3>
+            <p id="total-count">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Today's Appointments</h3>
+            <p id="today-count">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Upcoming Appointments</h3>
+            <p id="upcoming-count">0</p>
+        </div>
+    </section>
+
+    <!-- Doctor management -->
+    <section class="panel">
+        <div class="panel-header">
+            <h2>👨‍⚕️ Doctor Management</h2>
+            <button class="refresh-btn" onclick="loadDoctors()">Refresh Doctors</button>
+        </div>
+
+        <h3 id="doctor-form-title" style="margin-bottom: 18px;">Add New Doctor</h3>
+
+        <form id="doctor-form" class="doctor-form">
+            <div class="form-field">
+                <label for="doctor-name">Doctor Name</label>
+                <input
+                    type="text"
+                    id="doctor-name"
+                    placeholder="e.g. Dr. Ananya Rao"
+                    maxlength="100"
+                    required
+                >
+            </div>
+
+            <div class="form-field">
+                <label for="doctor-specialization">Specialization</label>
+                <input
+                    type="text"
+                    id="doctor-specialization"
+                    placeholder="e.g. Neurologist"
+                    maxlength="100"
+                    required
+                >
+            </div>
+
+            <div class="form-field">
+                <label for="doctor-experience">Experience (years)</label>
+                <input
+                    type="number"
+                    id="doctor-experience"
+                    min="0"
+                    max="100"
+                    step="1"
+                    placeholder="e.g. 5"
+                    required
+                >
+            </div>
+
+            <div class="form-field">
+                <label for="doctor-fee">Consultation Fee (₹)</label>
+                <input
+                    type="number"
+                    id="doctor-fee"
+                    min="0"
+                    step="0.01"
+                    placeholder="e.g. 500"
+                    required
+                >
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="save-btn" id="doctor-save-btn">
+                    Add Doctor
+                </button>
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    id="doctor-reset-btn"
+                    onclick="resetDoctorForm()"
+                    hidden
+                >
+                    Cancel Edit
+                </button>
+            </div>
+        </form>
+
+        <p class="form-note">
+            Doctor changes are stored in Java memory in this project.
+            Restarting the Java server resets doctor changes.
+        </p>
+
+        <div class="panel-header" style="margin-top: 28px;">
+            <h3>Registered Doctors</h3>
+            <input
+                type="text"
+                id="doctor-search"
+                placeholder="Search doctors..."
+                aria-label="Search doctors"
+                style="max-width: 300px;"
+            >
+        </div>
+
+        <div id="doctor-message" class="message">Loading doctors...</div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Doctor Name</th>
+                        <th>Specialization</th>
+                        <th>Experience</th>
+                        <th>Consultation Fee</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="doctors-table"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Appointment management -->
+    <section class="panel">
+        <div class="panel-header">
+            <h2>Patient Appointments</h2>
+
+            <div class="search-area">
+                <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Search patient, phone or doctor..."
+                    aria-label="Search appointments"
+                >
+
+                <button class="refresh-btn" onclick="loadAppointments()">
+                    Refresh
+                </button>
+            </div>
+        </div>
+
+        <div id="message" class="message">Loading appointments...</div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Patient</th>
+                        <th>Phone</th>
+                        <th>Doctor</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Fee</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="appointments-table"></tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    &copy; 2026 MediMeet Hospital Appointment System
+</footer>
+
+<script>
+    // Demo login protection. This is not secure authentication for a public website.
+    if (sessionStorage.getItem("medimeetAdminLoggedIn") !== "true") {
+        window.location.replace("admin-login.html");
+    }
+
+    const APPOINTMENTS_API = "http://localhost:8080/api/appointments";
+    const DOCTORS_API = "http://localhost:8080/api/doctors";
+
+    let appointments = [];
+    let doctors = [];
+    let editingDoctorId = null;
+
+    function logout() {
+        sessionStorage.removeItem("medimeetAdminLoggedIn");
+        window.location.href = "admin-login.html";
+    }
+
+    function goHome() {
+        window.location.href = "index.html";
+    }
+
+    function getValue(object, possibleKeys) {
+        for (const key of possibleKeys) {
+            if (object[key] !== undefined && object[key] !== null) {
+                return object[key];
+            }
+        }
+
+        return "";
+    }
+
+    function safeText(value) {
+        const element = document.createElement("span");
+        element.textContent = String(value ?? "");
+        return element.innerHTML;
+    }
+
+    // ---------------- DOCTOR MANAGEMENT ----------------
+
+    async function loadDoctors() {
+        const message = document.getElementById("doctor-message");
+        message.textContent = "Loading doctors...";
+        message.classList.remove("error");
+        message.style.display = "block";
+
+        try {
+            const response = await fetch(DOCTORS_API);
+
+            if (!response.ok) {
+                throw new Error("Server returned " + response.status);
+            }
+
+            const data = await response.json();
+
+            doctors = Array.isArray(data)
+                ? data
+                : data.doctors || [];
+
+            renderDoctors();
+        } catch (error) {
+            message.textContent =
+                "Could not load doctors. Make sure MediMeetServer is running on port 8080.";
+            message.classList.add("error");
+            message.style.display = "block";
+
+            console.error("Doctor loading error:", error);
+        }
+    }
+
+    function renderDoctors() {
+        const tbody = document.getElementById("doctors-table");
+        const message = document.getElementById("doctor-message");
+        const search = document.getElementById("doctor-search")
+            .value.trim().toLowerCase();
+
+        tbody.innerHTML = "";
+
+        const filteredDoctors = doctors.filter(doctor => {
+            const name = getValue(doctor, ["name", "doctorName"]);
+            const specialization = getValue(
+                doctor,
+                ["specialization", "speciality"]
+            );
+
+            return String(name).toLowerCase().includes(search) ||
+                String(specialization).toLowerCase().includes(search);
+        });
+
+        if (doctors.length === 0) {
+            message.textContent = "No doctors found. Add your first doctor using the form above.";
+            message.classList.remove("error");
+            message.style.display = "block";
+            return;
+        }
+
+        if (filteredDoctors.length === 0) {
+            message.textContent = "No matching doctors found.";
+            message.classList.remove("error");
+            message.style.display = "block";
+            return;
+        }
+
+        message.style.display = "none";
+
+        filteredDoctors.forEach(doctor => {
+            const id = getValue(doctor, ["id", "doctorId"]);
+            const name = getValue(doctor, ["name", "doctorName"]);
+            const specialization = getValue(
+                doctor,
+                ["specialization", "speciality"]
+            );
+            const experience = getValue(doctor, ["experience"]);
+            const fee = getValue(
+                doctor,
+                ["consultationFee", "fee"]
+            );
+
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${safeText(id)}</td>
+                <td>${safeText(name)}</td>
+                <td>${safeText(specialization)}</td>
+                <td>${safeText(experience)} years</td>
+                <td>₹${safeText(fee)}</td>
+                <td>
+                    <button class="edit-btn">Edit</button>
+                    <button class="delete-btn">Delete</button>
+                </td>
+            `;
+
+            row.querySelector(".edit-btn").addEventListener("click", () => {
+                editDoctor(doctor);
+            });
+
+            row.querySelector(".delete-btn").addEventListener("click", () => {
+                deleteDoctor(id, name);
+            });
+
+            tbody.appendChild(row);
+        });
+    }
+
+    document.getElementById("doctor-form").addEventListener(
+        "submit",
+        async function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("doctor-name")
+                .value.trim();
+            const specialization = document.getElementById(
+                "doctor-specialization"
+            ).value.trim();
+            const experience = Number(
+                document.getElementById("doctor-experience").value
+            );
+            const consultationFee = Number(
+                document.getElementById("doctor-fee").value
+            );
+
+            if (!name || !specialization) {
+                alert("Please enter the doctor's name and specialization.");
+                return;
+            }
+
+            if (!Number.isInteger(experience) ||
+                experience < 0 || experience > 100) {
+                alert("Experience must be a whole number between 0 and 100.");
+                return;
+            }
+
+            if (!Number.isFinite(consultationFee) || consultationFee < 0) {
+                alert("Please enter a valid consultation fee.");
+                return;
+            }
+
+            const doctorData = {
+                name: name,
+                specialization: specialization,
+                experience: experience,
+                consultationFee: consultationFee
+            };
+
+            const isEditing = editingDoctorId !== null;
+            const url = isEditing
+                ? DOCTORS_API + "?id=" + encodeURIComponent(editingDoctorId)
+                : DOCTORS_API;
+
+            const saveButton = document.getElementById("doctor-save-btn");
+            saveButton.disabled = true;
+            saveButton.textContent = isEditing ? "Saving..." : "Adding...";
+
+            try {
+                const response = await fetch(url, {
+                    method: isEditing ? "PUT" : "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(doctorData)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(
+                        errorText || "Server returned " + response.status
+                    );
+                }
+
+                alert(isEditing
+                    ? "Doctor details updated successfully!"
+                    : "Doctor added successfully!");
+
+                resetDoctorForm();
+                await loadDoctors();
+
+                // Refresh appointments in case updated doctor details are reflected there.
+                await loadAppointments();
+
+            } catch (error) {
+                alert(
+                    "Could not save the doctor. Check the Java server and try again."
+                );
+                console.error("Doctor save error:", error);
+            } finally {
+                saveButton.disabled = false;
+                saveButton.textContent = editingDoctorId !== null
+                    ? "Update Doctor"
+                    : "Add Doctor";
+            }
+        }
+    );
+
+    function editDoctor(doctor) {
+        editingDoctorId = getValue(doctor, ["id", "doctorId"]);
+
+        document.getElementById("doctor-name").value =
+            getValue(doctor, ["name", "doctorName"]);
+
+        document.getElementById("doctor-specialization").value =
+            getValue(doctor, ["specialization", "speciality"]);
+
+        document.getElementById("doctor-experience").value =
+            getValue(doctor, ["experience"]);
+
+        document.getElementById("doctor-fee").value =
+            getValue(doctor, ["consultationFee", "fee"]);
+
+        document.getElementById("doctor-form-title").textContent =
+            "Edit Doctor (ID: " + editingDoctorId + ")";
+
+        document.getElementById("doctor-save-btn").textContent =
+            "Update Doctor";
+
+        document.getElementById("doctor-reset-btn").hidden = false;
+
+        document.getElementById("doctor-name").focus();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+
+    function resetDoctorForm() {
+        editingDoctorId = null;
+
+        document.getElementById("doctor-form").reset();
+
+        document.getElementById("doctor-form-title").textContent =
+            "Add New Doctor";
+
+        document.getElementById("doctor-save-btn").textContent =
+            "Add Doctor";
+
+        document.getElementById("doctor-reset-btn").hidden = true;
+    }
+
+    async function deleteDoctor(id, name) {
+        if (id === "" || id === null || id === undefined) {
+            alert("This doctor has no valid ID.");
+            return;
+        }
+
+        const confirmed = confirm(
+            "Delete " + name + "?\n\nIf this doctor has existing appointments, the server may refuse deletion."
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                DOCTORS_API + "?id=" + encodeURIComponent(id),
+                { method: "DELETE" }
+            );
+
+            if (!response.ok) {
+                const errorText = await response.text();
+
+                if (response.status === 409) {
+                    alert(
+                        "This doctor cannot be deleted because appointments are linked to them. Cancel or manage those appointments first."
+                    );
+                    return;
+                }
+
+                throw new Error(
+                    errorText || "Server returned " + response.status
+                );
+            }
+
+            if (String(editingDoctorId) === String(id)) {
+                resetDoctorForm();
+            }
+
+            alert("Doctor deleted successfully.");
+            await loadDoctors();
+
+        } catch (error) {
+            alert(
+                "Could not delete the doctor. Check the Java server and try again."
+            );
+            console.error("Doctor deletion error:", error);
+        }
+    }
+
+    document.getElementById("doctor-search").addEventListener(
+        "input",
+        renderDoctors
+    );
+
+    // ---------------- APPOINTMENT MANAGEMENT ----------------
+
+    function getAppointmentDate(appointment) {
+        return String(getValue(appointment, [
+            "date", "appointmentDate"
+        ])).slice(0, 10);
+    }
+
+    function getAppointmentTime(appointment) {
+        return getValue(appointment, [
+            "time", "appointmentTime"
+        ]);
+    }
+
+    function getAppointmentId(appointment) {
+        return getValue(appointment, [
+            "id", "appointmentId"
+        ]);
+    }
+
+    function updateStatistics() {
+        const today = new Date();
+
+        const todayString =
+            today.getFullYear() + "-" +
+            String(today.getMonth() + 1).padStart(2, "0") + "-" +
+            String(today.getDate()).padStart(2, "0");
+
+        const now = new Date();
+
+        const todayAppointments = appointments.filter(appointment =>
+            getAppointmentDate(appointment) === todayString
+        );
+
+        const upcomingAppointments = appointments.filter(appointment => {
+            const date = getAppointmentDate(appointment);
+            const time = String(getAppointmentTime(appointment));
+
+            if (!date) {
+                return false;
+            }
+
+            const appointmentDateTime = new Date(date + "T" + time);
+
+            return !Number.isNaN(appointmentDateTime.getTime()) &&
+                appointmentDateTime >= now;
+        });
+
+        document.getElementById("total-count").textContent =
+            appointments.length;
+
+        document.getElementById("today-count").textContent =
+            todayAppointments.length;
+
+        document.getElementById("upcoming-count").textContent =
+            upcomingAppointments.length;
+    }
+
+    function renderAppointments() {
+        const tbody = document.getElementById("appointments-table");
+        const message = document.getElementById("message");
+
+        const search = document.getElementById("search-input")
+            .value.trim().toLowerCase();
+
+        tbody.innerHTML = "";
+
+        const filteredAppointments = appointments.filter(appointment => {
+            const patient = getValue(appointment, [
+                "patientName", "name"
+            ]);
+
+            const phone = getValue(appointment, [
+                "phone", "patientPhone", "mobile"
+            ]);
+
+            const doctor = getValue(appointment, [
+                "doctorName", "doctor"
+            ]);
+
+            return String(patient).toLowerCase().includes(search) ||
+                String(phone).toLowerCase().includes(search) ||
+                String(doctor).toLowerCase().includes(search);
+        });
+
+        if (appointments.length === 0) {
+            message.textContent = "No appointments have been booked yet.";
+            message.classList.remove("error");
+            message.style.display = "block";
+            return;
+        }
+
+        if (filteredAppointments.length === 0) {
+            message.textContent = "No matching appointments found.";
+            message.classList.remove("error");
+            message.style.display = "block";
+            return;
+        }
+
+        message.style.display = "none";
+
+        filteredAppointments.forEach(appointment => {
+            const row = document.createElement("tr");
+
+            const patient = getValue(appointment, [
+                "patientName", "name"
+            ]);
+
+            const phone = getValue(appointment, [
+                "phone", "patientPhone", "mobile"
+            ]);
+
+            const doctor = getValue(appointment, [
+                "doctorName", "doctor"
+            ]);
+
+            const date = getAppointmentDate(appointment);
+            const time = getAppointmentTime(appointment);
+
+            const fee = getValue(appointment, [
+                "fee", "consultationFee"
+            ]);
+
+            const id = getAppointmentId(appointment);
+
+            row.innerHTML = `
+                <td>${safeText(patient || "—")}</td>
+                <td>${safeText(phone || "—")}</td>
+                <td>${safeText(doctor || "—")}</td>
+                <td>${safeText(date || "—")}</td>
+                <td>${safeText(time || "—")}</td>
+                <td>${fee !== "" ? "₹" + safeText(fee) : "—"}</td>
+                <td><span class="status">Booked</span></td>
+                <td>
+                    <button class="cancel-btn" ${id === "" ? "disabled" : ""}>
+                        Cancel
+                    </button>
+                </td>
+            `;
+
+            row.querySelector(".cancel-btn").addEventListener(
+                "click",
+                () => cancelAppointment(id)
+            );
+
+            tbody.appendChild(row);
+        });
+    }
+
+    async function loadAppointments() {
+        const message = document.getElementById("message");
+
+        message.textContent = "Loading appointments...";
+        message.style.display = "block";
+        message.classList.remove("error");
+
+        try {
+            const response = await fetch(APPOINTMENTS_API);
+
+            if (!response.ok) {
+                throw new Error("Server returned " + response.status);
+            }
+
+            const data = await response.json();
+
+            appointments = Array.isArray(data)
+                ? data
+                : data.appointments || [];
+
+            updateStatistics();
+            renderAppointments();
+
+        } catch (error) {
+            message.textContent =
+                "Could not connect to the Java backend. Make sure MediMeetServer is running on port 8080.";
+            message.classList.add("error");
+            message.style.display = "block";
+
+            console.error("Appointment loading error:", error);
+        }
+    }
+
+    async function cancelAppointment(id) {
+        if (id === "" || id === null || id === undefined) {
+            alert("This appointment has no valid ID.");
+            return;
+        }
+
+        const confirmed = confirm(
+            "Are you sure you want to cancel this appointment?"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                APPOINTMENTS_API + "?id=" + encodeURIComponent(id),
+                { method: "DELETE" }
+            );
+
+            if (!response.ok) {
+                throw new Error("Cancellation failed.");
+            }
+
+            alert("Appointment cancelled successfully.");
+            await loadAppointments();
+
+        } catch (error) {
+            alert(
+                "Could not cancel the appointment. Check whether the Java server is running."
+            );
+            console.error("Cancellation error:", error);
+        }
+    }
+
+    document.getElementById("search-input").addEventListener(
+        "input",
+        renderAppointments
+    );
+
+    // Load both sections when the dashboard opens.
+    loadDoctors();
+    loadAppointments();
+</script>
+
+</body>
+</html>
