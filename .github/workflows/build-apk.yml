@@ -1,1 +1,53 @@
+name: Build MediMeet APK
 
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Capacitor
+        run: |
+          npm install -g @capacitor/cli
+          npm install @capacitor/core @capacitor/android
+
+      - name: Prepare MediMeet web app
+        run: |
+          mkdir -p www
+          cp index.html style.css script.js www/
+          cp admin-login.html admin-dashboard.html www/
+
+      - name: Initialize Android project
+        run: |
+          npm init -y
+          npx cap init MediMeet com.medimeet.app --web-dir=www
+          npx cap add android
+          npx cap sync android
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Build APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: MediMeet-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
