@@ -4,3 +4,5 @@ A Hospital Appointment Booking System
 People can search for available doctors and book an appointment
 <br>
 Author: Manish Baliga
+<br>
+purpose:To avoid rush and maintain a systematic environment inside hospitals
