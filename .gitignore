@@ -1,0 +1,17 @@
+# Java compiled files
+*.class
+
+# Environment and secret files
+.env
+.env.*
+
+# IDE settings
+.vscode/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Database backups
+*.sql
+*.sql.gz
